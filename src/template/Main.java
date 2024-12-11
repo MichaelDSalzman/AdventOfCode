@@ -24,11 +24,11 @@ public class Main {
 
     public static class Problem {
 
-        public int calculateP1(List<String> lines) {
+        public Object calculateP1(List<String> lines) {
             return -1;
         }
 
-        public int calculateP2(List<String> lines) {
+        public Object calculateP2(List<String> lines) {
             return -1;
         }
     }
