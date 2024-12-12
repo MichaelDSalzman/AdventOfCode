@@ -2,12 +2,21 @@ package template;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import util.FileReader;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String year = "XX";
-        String day = "XX";
+        String year = null;
+        String day = null;
+
+        Pattern p = Pattern.compile("aoc(\\d+)\\.day(\\d+).*");
+        Matcher m = p.matcher(aoc2024.day12.Main.class.getName());
+        if(m.find()) {
+            year = m.group(1);
+            day = m.group(2);
+        }
 
         FileReader fileReader = new FileReader("src/aoc" + year + "/day" + day + "/sample.txt");
         // FileReader fileReader = new FileReader("src/aoc" + year + "/day" + day + "/input.txt");
