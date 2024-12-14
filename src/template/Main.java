@@ -12,7 +12,7 @@ public class Main {
         String day = null;
 
         Pattern p = Pattern.compile("aoc(\\d+)\\.day(\\d+).*");
-        Matcher m = p.matcher(aoc2024.day12.Main.class.getName());
+        Matcher m = p.matcher(Main.class.getName());
         if(m.find()) {
             year = m.group(1);
             day = m.group(2);
