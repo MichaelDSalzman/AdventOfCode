@@ -31,4 +31,4 @@ bin/
 .idea
 *.iml
 lib/
-**/*.txt
+**/input.txt
