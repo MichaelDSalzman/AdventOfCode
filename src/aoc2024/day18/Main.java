@@ -2,6 +2,7 @@ package aoc2024.day18;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,9 +69,31 @@ public class Main {
 
                 if(min+1 == max) {
                     System.out.println("NUM GUESSES: " + numGuesses);
+                    // print(lines, width, min);
+                    System.out.println(findShortestPath(lines, width, min));
                     return lines.get(min);
                 }
             }
+        }
+
+        private void print(List<String> lines, int width, int min) {
+            List<String> output = new ArrayList<>();
+            for(int vertical=0; vertical<width; vertical++) {
+                output.add(" ".repeat(width));
+            }
+
+            for(int i=0; i<min; i++) {
+                String line = lines.get(i);
+                List<Integer> coordinates = Arrays.stream(line.split(",")).map(Integer::parseInt).toList();
+
+                String outputLine = output.get(coordinates.get(1));
+                outputLine = outputLine.substring(0, coordinates.get(0)) + '\u2588' + outputLine.substring(coordinates.get(0)+1);
+                output.set(coordinates.get(1), outputLine);
+            }
+
+            output.add(0, Character.toString('\u2588').repeat(width));
+            output.add(Character.toString('\u2588').repeat(width));
+            output.forEach(l -> System.out.println('\u2588' + l + '\u2588'));
         }
 
         // Find the shortest number of steps to go from 0,0 to (width-1,width-1)
