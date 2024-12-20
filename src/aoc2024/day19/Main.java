@@ -92,7 +92,6 @@ public class Main {
                 if(desiredTowel.equals(pattern)) {
                     count++;
                 }
-
                 // else, if the towel starts with the pattern, recursively investigate the new towel scraps
                 else if(desiredTowel.startsWith(pattern)) {
                     String newDesiredTowel = desiredTowel.substring(pattern.length());
