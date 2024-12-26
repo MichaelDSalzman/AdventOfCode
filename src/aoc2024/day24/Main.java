@@ -125,7 +125,7 @@ public class Main {
 
             verifyHalfAdder(rules, 0);
 
-            for(int i=1; i<=lastZIndex; i++) {
+            for(int i=1; i<lastZIndex; i++) {
                 verifyFullAdder(rules, i);
             }
         }
@@ -142,6 +142,8 @@ public class Main {
 
         // FIXME FOUND SOLUTION BY HAND BY USING THESE EXCEPTIONS TO FIND WHERE THE ERRORS WERE
         //  THEN LOOKING AT THE INPUT AND MANUALLY FIGURING OUT WHAT NEEDED TO SWAP
+        //  THIS MAKES A MASSIVE ASSUMPTION THAT THE SWAPS ONLY HAPPEN WITHIN THE FULL ADDER
+        //  IF A SWAP WERE TO HAPPEN BETWEEN ADDERS, THIS WOULD NOT CATCH IT
         public void verifyFullAdder(Collection<Rule> rules, int index) {
 
             String xIn = "x" + (index<10 ? "0" : "") + index;
@@ -167,7 +169,12 @@ public class Main {
         }
 
         public Rule findRule(Collection<Rule> rules, Set<String> inputs, Operation operation) {
-            return rules.stream().filter(r -> inputs.contains(r.input1) && inputs.contains(r.input2) && r.operation.equals(operation)).findFirst().orElseThrow();
+            return rules.stream()
+                .filter(r -> inputs.contains(r.input1)
+                    && inputs.contains(r.input2)
+                    && r.operation.equals(operation))
+                .findFirst()
+                .orElseThrow(()-> new RuntimeException("No rule found with inputs: " +inputs  + " and operation " + operation));
         }
 
         public enum Operation {AND,OR,XOR}

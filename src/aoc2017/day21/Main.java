@@ -38,19 +38,31 @@ public class Main {
                     }
                 );
 
-            // for(int i=0; i<2; i++) {
-            for(int i=0; i<3; i++) {
-                System.out.println(Arrays.deepToString(grid.grid));
+            for(int i=0; i<5; i++) {
                 grid = iterate(grid, rules);
             }
-
-            System.out.println(Arrays.deepToString(grid.grid));
 
             return grid.countTrue();
         }
 
         public int calculateP2(List<String> lines) {
-            return -1;
+
+            List<Rule> rules = generateRules(lines);
+
+            Grid grid =
+                new Grid(new char[][]
+                    {
+                        {'.', '#', '.'},
+                        {'.', '.', '#'},
+                        {'#', '#', '#'}
+                    }
+                );
+
+            for(int i=0; i<18; i++) {
+                grid = iterate(grid, rules);
+            }
+
+            return grid.countTrue();
         }
 
         private List<Rule> generateRules(List<String> lines) {
@@ -126,7 +138,7 @@ public class Main {
             int subSize;
 
             if(originalSize % 2 == 0) {
-                newSize = originalSize + (originalSize/2);
+                newSize = (int) (1.5 * originalSize);
                 subSize = 2;
             } else {
                 newSize = originalSize + (originalSize/3);
@@ -135,11 +147,25 @@ public class Main {
 
             char[][] newGrid = new char[newSize][newSize];
 
-            for(int i=0; i<(inputGrid.grid.length%subSize); i++) {
-                for(int j=0; j<(inputGrid.grid.length%subSize); j++) {
-                    if(subSize == 2) {
-                    } else {
+            // Iterate over the input grid, but each iteration jumps to the next starting spot in the grid
+            for(int i=0; i<(inputGrid.grid.length); i+=subSize) {
+                for(int j=0; j<(inputGrid.grid.length); j+=subSize) {
+                    char[][] subGrid = new char[subSize][subSize];
+                    for(int vertical=0; vertical<subSize; vertical++) {
+                        for(int horizontal=0; horizontal<subSize; horizontal++) {
+                            subGrid[vertical][horizontal] = inputGrid.grid[i+vertical][j+horizontal];
+                        }
+                    }
 
+                    char[][] ruleOutput = rules.stream().filter(r -> r.gridMatches(subGrid)).findFirst().orElseThrow().output;
+
+                    int startingVerticalIndex = ruleOutput.length * i/subSize;
+                    int startingHorizontalIndex = ruleOutput.length * j/subSize;
+
+                    for(int vertical=0; vertical<ruleOutput.length; vertical++) {
+                        for(int horizontal=0; horizontal<ruleOutput.length; horizontal++) {
+                            newGrid[startingVerticalIndex+vertical][startingHorizontalIndex+horizontal] = ruleOutput[vertical][horizontal];
+                        }
                     }
                 }
             }
@@ -178,13 +204,13 @@ public class Main {
             this.output = output;
         }
 
-        public boolean gridMatches(Grid grid) {
-            if(grid.grid.length != input.length) {
+        public boolean gridMatches(char[][] grid) {
+            if(grid.length != input.length) {
                 return false;
             }
 
             for(int i=0; i<input.length; i++) {
-                if(!Arrays.equals(input[i], grid.grid[i])) {
+                if(!Arrays.equals(input[i], grid[i])) {
                     return false;
                 }
             }
