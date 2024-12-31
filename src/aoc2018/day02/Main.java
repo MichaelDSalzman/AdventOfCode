@@ -32,10 +32,7 @@ public class Main {
             for(String line : lines) {
                 Map<Character, Integer> charMap = new HashMap<>();
                 for(Character c : line.toCharArray()) {
-                    Integer value = charMap.get(c);
-                    if(value == null) {
-                        value = 0;
-                    }
+                    Integer value = charMap.getOrDefault(c, 0);
                     charMap.put(c, ++value);
                 }
 
